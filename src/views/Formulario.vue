@@ -43,7 +43,7 @@ const agregarNuevoUsuario = async () => {
       
     if (error) {
       throw error;
-    }
+    } 
 
     console.log('Usuario agregado correctamente:', data);
 

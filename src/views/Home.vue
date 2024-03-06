@@ -16,7 +16,6 @@ import { almacenProductos } from "../stores/products";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "vue-router";
 
-
 const router = useRouter();
 const deProductos = almacenProductos();
 const user = almacenAuth();
@@ -51,6 +50,22 @@ console.log(products);
 const addNewPerson = () => {
   router.push("/formulario");
 };
+
+const mifuncion = async (payload) => { 
+  console.log("Change received!", payload);
+  // Actualiza la lista de usuarios cuando haya cambios en la tabla 'personas'
+  fetchData(); 
+};
+
+// Establece el canal de escucha para los cambios en la tabla 'personas'
+supabase
+  .channel("personas")
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "*", table: "personas" },
+    mifuncion
+  )
+  .subscribe(); 
 
 // const products = computed(() => deProductos.list);
 </script>
