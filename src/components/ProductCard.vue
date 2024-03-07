@@ -49,12 +49,12 @@ export default defineComponent({
       }
     };
 
-    const addNewPerson = async () => {
+   const addNewPerson = async () => {
       try {
         const { data, error } = await supabase.storage.createBucket("avatars", {
           public: false,
-          allowedMimeTypes: ["image/png"],
-          fileSizeLimit: 1024,
+          allowedMimeTypes: ["image/*"],
+          fileSizeLimit: 1024 ,
         });
         if (error) {
           throw error;

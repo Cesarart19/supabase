@@ -12,6 +12,21 @@
         />
       </div>
       <div class="mb-4">
+        <label for="avatar" class="block font-bold mb-1">Avatar:</label>
+        <input
+          type="file"
+          id="avatar"
+          accept="image/*"
+          @change="handleFileUpload"
+          class="block w-full rounded border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+        />
+      </div>
+      <div v-if="archivo">
+        <p>Nombre del archivo: {{ archivo.name }}</p>
+        <p>Tipo de archivo: {{ archivo.type }}</p>
+        <p>Tamaño del archivo: {{ archivo.size }} bytes</p>
+      </div>
+      <div class="mb-4">
         <button
           @click="editarUsuario"
           type="submit"
@@ -39,19 +54,23 @@ const supabase = createClient(
 );
 
 const nombre = ref("");
+const archivo = ref(null); // Variable para almacenar la información del archivo
 const router = useRouter();
 
 const lectura = async () => {
   try {
-    console.log(typeof id)
-    const { data, error } = await supabase.from("personas").select().eq("id", id.value);
-    
+    console.log(typeof id);
+    const { data, error } = await supabase
+      .from("personas")
+      .select()
+      .eq("id", id.value);
+
     if (error) {
       console.log(error);
       throw new Error(error.message);
     } else {
       console.log(data[0].nombre); //Pepito pote
-       nombre.value = data[0].nombre
+      nombre.value = data[0].nombre;
     }
     // products.value = data || [];
   } catch (error) {
@@ -88,6 +107,13 @@ const editarUsuario = async () => {
   } catch (error) {
     console.error("Error al editar un nuevo usuario:", error);
     // Manejar cualquier error que ocurra al agregar un nuevo usuario
+  }
+};
+
+const handleFileUpload = (event) => {
+  const files = event.target.files;
+  if (files.length > 0) {
+    archivo.value = files[0];
   }
 };
 </script>
